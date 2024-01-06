@@ -1,34 +1,59 @@
 <!doctype html>
-<html lang="en">
-  <html ng-app="LunchCheck">
-  <head>
-    <title>Lunch Checker</title
-     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-     <script src="app.js></script>
+<html lang="en" ng-app="LunchCheck">
+<head>
+    <title>Lunch Checker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
       .message { font-size: 1.3em; font-weight: bold; }
     </style>
-  </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
 <body>
-   <div class="container">
+   <div class="container" ng-controller="LunchCheckController">
      <h1>Lunch Checker</h1>
 
-         <div class="form-group">
-             <input id="lunch-menu" type="text"
-             placeholder="list comma separated dishes you usually have for lunch"
-             class="form-control">
-         </div>
-         <div class="form-group">
-             <button class="btn btn-default">Check If Too Much</button>
-         </div>
-        <div ng-controller="LunchCheckController">
-        <input type="text" placeholder="Enter comma-separated items..." ng-model="lunchItems">
-        <button ng-click="checkLunch()">Check If Too Much</button>
-        <p>{{ message }}</p>
-         </div>
+     <div class="form-group">
+         <input id="lunch-menu" type="text"
+                placeholder="list comma separated dishes you usually have for lunch"
+                class="form-control"
+                ng-model="lunchItems">
+     </div>
+     
+     <div class="form-group">
+         <button class="btn btn-default" ng-click="checkLunch()">Check If Too Much</button>
+     </div>
+     
+     <div class="form-group message" ng-style="messageStyle">
+         <p>{{ message }}</p>
+     </div>
    </div>
+
+   <script>
+       // Define the AngularJS module
+       var app = angular.module('LunchCheck', []);
+       
+       // Define the controller
+       app.controller('LunchCheckController', ['$scope', function($scope) {
+           $scope.checkLunch = function() {
+               if (!$scope.lunchItems || $scope.lunchItems.trim() === "") {
+                   $scope.message = "Please enter data first";
+                   $scope.messageStyle = { 'color': 'red' };
+                   return;
+               }
+               
+               var items = $scope.lunchItems.split(',').filter(item => item.trim() !== "");
+               
+               if (items.length <= 3) {
+                   $scope.message = "Enjoy!";
+                   $scope.messageStyle = { 'color': 'green' };
+               } else {
+                   $scope.message = "Too much!";
+                   $scope.messageStyle = { 'color': 'green' };
+               }
+           };
+       }]);
+   </script>
 
 </body>
 </html>
