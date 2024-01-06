@@ -1,31 +1,57 @@
-
 <!doctype html>
 <html lang="en" ng-app="LunchCheck">
-  <head>
+<head>
     <title>Lunch Checker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="styles/bootstrap.min.css" rel="stylesheet" >
+    <link href="styles/bootstrap.min.css" rel="stylesheet">
     <style>
       .message { font-size: 1.3em; font-weight: bold; }
     </style>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <script src="app.js"></script>
-  </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
 <body>
-   <div class="container" ng-controller="LunchCheckController" >
+   <div class="container" ng-controller="LunchCheckController">
      <h1>Lunch Checker</h1>
-         <div class="form-group">
-             <input id="lunch-menu" type="text"
-             placeholder="list comma separated dishes you usually have for lunch"
-             class="form-control">
-         </div>
-         <div class="form-group">
-             <button class="btn btn-default" ng-click="CheckIfTooMuch()">Check If Too Much</button>
-         </div>
-         <div class="form-group message" ng-style="myObj">
-            <alert>{{myObj.message}}</alert>
-         </div>
-   </div>
+     <div class="form-group">
+         <input id="lunch-menu" type="text" ng-model="lunchItems"
+                placeholder="list comma separated dishes you usually have for lunch"
+                class="form-control">
+     </div>
+     <div class="form-group">
+         <button class="btn btn-default" ng-click="CheckIfTooMuch()">Check If Too Much</button>
+     </div>
+     <div class="form-group message" ng-style="myObj">
+        <p>{{myObj.message}}</p>
+     </div>
 
+    <script>
+        // Defining the AngularJS module and controller in the same file
+        (function() {
+            'use strict';
+
+            // Define the AngularJS module
+            var app = angular.module('LunchCheck', []);
+
+            // Define the controller
+            app.controller('LunchCheckController', ['$scope', function($scope) {
+                $scope.CheckIfTooMuch = function() {
+                    if (!$scope.lunchItems || $scope.lunchItems.trim() === "") {
+                        $scope.myObj = { 'message': 'Please enter data first', 'color': 'red' };
+                        return;
+                    }
+                    
+                    var items = $scope.lunchItems.split(',');
+                    
+                    if (items.length <= 3) {
+                        $scope.myObj = { 'message': 'Enjoy!', 'color': 'green' };
+                    } else {
+                        $scope.myObj = { 'message': 'Too much!', 'color': 'green' };
+                    }
+                };
+            }]);
+        })();
+    </script>
+
+   </div>
 </body>
 </html>
